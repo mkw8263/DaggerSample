@@ -1,4 +1,4 @@
-package dagger.dagger2.di
+package dagger.dagger2.di.module
 
 import dagger.Module
 import dagger.Provides
@@ -12,6 +12,5 @@ class RepositoryModule {
     fun getLocalDataSource() = LocalDataSource()
 
     @Provides
-    fun getMainRepo(localDataSource: LocalDataSource): MainRepository =
-        MainRepository(localDataSource)
+    fun getMainRepo(localDataSource: LocalDataSource): MainRepository = MainRepository(localDataSource)
 }

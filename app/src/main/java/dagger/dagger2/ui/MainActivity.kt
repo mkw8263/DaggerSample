@@ -1,36 +1,26 @@
 package dagger.dagger2.ui
 
 import android.annotation.SuppressLint
-import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import dagger.dagger2.App
+import dagger.android.support.DaggerAppCompatActivity
 import dagger.dagger2.R
-import dagger.dagger2.repo.MainRepository
 import dagger.dagger2.viewmodel.MainViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
-@Suppress("UNCHECKED_CAST")
-class MainActivity : AppCompatActivity() {
+class MainActivity : DaggerAppCompatActivity() {
     @Inject
-    lateinit var mainRepository: MainRepository
-
+    lateinit var factory: ViewModelProvider.Factory
     private val mainViewModel: MainViewModel by lazy {
-        ViewModelProviders.of(this, object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T = MainViewModel(
-                mainRepository
-            ) as T
-        })[MainViewModel::class.java]
+        ViewModelProviders.of(this, factory)[MainViewModel::class.java]
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        (application as App).daggerAppComponent.inject(this)
 
         subscribeUI()
         mainViewModel.getUser("홍길동")
